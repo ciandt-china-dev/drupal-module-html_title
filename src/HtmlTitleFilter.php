@@ -1,11 +1,11 @@
 <?php
 
+namespace Drupal\html_title;
+
 /**
  * @file
- * HtmlTitleFilter 
+ * Contains \Drupal\html_title\HtmlTitleFilter.
  */
-
-namespace Drupal\html_title;
 
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Component\Utility\Xss;
@@ -13,16 +13,16 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Render\Markup;
 
 /**
-* Drupal\html_titleHtmlTitleFilter.
-*/
+ * Drupal\html_titleHtmlTitleFilter.
+ */
 class HtmlTitleFilter {
-  
+
   protected $configFactory;
 
   /**
    * Construct.
    */
-  function __construct(ConfigFactory $configFactory) {
+  public function __construct(ConfigFactory $configFactory) {
     $this->configFactory = $configFactory;
   }
 
@@ -30,9 +30,12 @@ class HtmlTitleFilter {
    * Filte string with allow html tags.
    */
   public function decodeToText($str) {
-    return Xss::filter(Html::decodeEntities((string)$str), $this->getAllowHtmlTags());
+    return Xss::filter(Html::decodeEntities((string) $str), $this->getAllowHtmlTags());
   }
 
+  /**
+   * Filte string with allow html tags.
+   */
   public function decodeToMarkup($str) {
     return Markup::create($this->decodeToText($str));
   }

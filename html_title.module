@@ -4,23 +4,22 @@
  * @file
  * Contains digitalpeoples_sns.module..
  */
+
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 
 /**
- * Implementation of hook_views_data_alter()
+ * Implements hook_views_data_alter().
  */
-function html_title_views_data_alter(array &$data){
+function html_title_views_data_alter(&$data) {
   $data['node_field_data']['title']['field']['id'] = 'node_html_title';
 }
 
 /**
- * Implementation of hook_preprocess_HOOK()
+ * Implements hook_preprocess_HOOK().
  */
 function html_title_preprocess_breadcrumb(&$vars) {
-  // $last = array_pop($vars['breadcrumb']);
   $last = &$vars['breadcrumb'][count($vars['breadcrumb']) - 1];
-  // var_dump($last);
   if (!isset($last['url'])) {
     $last['text'] = \Drupal::service('html_title.filter')->decodeToMarkup($last['text']);
   }
@@ -49,6 +48,7 @@ function html_title_node_view(array &$build, EntityInterface $node, EntityViewDi
     case 'rss':
       $node->title->value = strip_tags($node->title->value);
       break;
+
     default:
       $build['title'][0]['#context']['value'] = \Drupal::service('html_title.filter')->decodeToMarkup($build['title'][0]['#context']['value']);
   }

@@ -1,14 +1,13 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\html_title\views\Plugin\views\field\NodeHtmlTitle.
- */
-
 namespace Drupal\html_title\Plugin\views\field;
 
+/**
+ * @file
+ * Contains \Drupal\html_title\Plugin\views\field\NodeHtmlTitle.
+ */
+
 use Drupal\node\Plugin\views\field\Node;
-use Drupal\Core\Render\Markup;
 use Drupal\views\ResultRow;
 
 /**
@@ -19,9 +18,9 @@ use Drupal\views\ResultRow;
  * @ViewsField("node_html_title")
  */
 class NodeHtmlTitle extends Node {
-   
+
   /**
-   * @{inheritdoc}
+   * Render title with html tags.
    */
   public function render(ResultRow $values) {
     $output = parent::render($values);
@@ -31,28 +30,19 @@ class NodeHtmlTitle extends Node {
     if (count($elements)) {
       static $done = FALSE;
 
-      // Ensure this block executes only once
+      // Ensure this block executes only once.
       if (!$done) {
 
-        // Add permitted elements to options so they are not stripped later
-        $tags = array();
-        foreach ($elements as $element) {
-          $tags[] = '<'. $element .'>';
-        }
+        // Add permitted elements to options so they are not stripped later.
+        $tags = array_map(function($element) {
+          return '<' . $element . '>';
+        }, $elements);
 
-        $this->options['alter']['preserve_tags'] .= ' '. implode(' ', $tags);
+        $this->options['alter']['preserve_tags'] .= ' ' . implode(' ', $tags);
         $done = TRUE;
       }
 
       $output = $filter->decodeToMarkup($output);
-
-      /*// Decode permitted HTML elements
-      $pattern = "/&lt;(\/?)(". implode('|', $elements) .")&gt;/i";
-      $output = preg_replace($pattern, '<$1$2>', $output);
-
-      // Decode HTML character entities
-      $pattern = "/&amp;([a-z0-9#]+);/";
-      $output = preg_replace($pattern, '&$1;', $output);*/
     }
 
     return $output;
