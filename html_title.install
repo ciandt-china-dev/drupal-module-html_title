@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Implements of hook_install().
+ */
+function html_title_install() {
+  // Increase module weight to prevent compatibility issues.
+  module_set_weight('html_title', 900);
+}

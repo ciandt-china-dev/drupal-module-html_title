@@ -1,0 +1,55 @@
+<?php
+
+/**
+ * @file
+ * Contains digitalpeoples_sns.module..
+ */
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implementation of hook_views_data_alter()
+ */
+function html_title_views_data_alter(array &$data){
+  $data['node_field_data']['title']['field']['id'] = 'node_html_title';
+}
+
+/**
+ * Implementation of hook_preprocess_HOOK()
+ */
+function html_title_preprocess_breadcrumb(&$vars) {
+  // $last = array_pop($vars['breadcrumb']);
+  $last = &$vars['breadcrumb'][count($vars['breadcrumb']) - 1];
+  // var_dump($last);
+  if (!isset($last['url'])) {
+    $last['text'] = \Drupal::service('html_title.filter')->decodeToMarkup($last['text']);
+  }
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function html_title_theme_registry_alter(&$theme_registry) {
+  if (isset($theme_registry['breadcrumb'])) {
+    $hooks = $theme_registry['breadcrumb']['preprocess functions'];
+    if (($pos = array_search('html_title_preprocess_breadcrumb', $hooks)) !== FALSE) {
+      unset($hooks[$pos]);
+    }
+    $hooks[] = 'html_title_preprocess_breadcrumb';
+
+    $theme_registry['breadcrumb']['preprocess functions'] = array_values($hooks);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function html_title_node_view(array &$build, EntityInterface $node, EntityViewDisplayInterface $display, $view_mode) {
+  switch ($view_mode) {
+    case 'rss':
+      $node->title->value = strip_tags($node->title->value);
+      break;
+    default:
+      $build['title'][0]['#context']['value'] = \Drupal::service('html_title.filter')->decodeToMarkup($build['title'][0]['#context']['value']);
+  }
+}
