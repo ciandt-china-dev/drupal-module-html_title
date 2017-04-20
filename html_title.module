@@ -2,7 +2,6 @@
 
 /**
  * @file
- * Contains digitalpeoples_sns.module..
  */
 
 use Drupal\Core\Entity\EntityInterface;
@@ -13,6 +12,18 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
  */
 function html_title_views_data_alter(&$data) {
   $data['node_field_data']['title']['field']['id'] = 'node_html_title';
+}
+
+/**
+ * Implementation of hook_preprocess_page_title()
+ */
+function html_title_preprocess_page_title(&$variables) {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $variables['node'] = $node;
+    $node = $variables['node'];
+    $variables['title'] = \Drupal::service('html_title.filter')
+      ->decodeToMarkup($node->getTitle());
+  }
 }
 
 /**
