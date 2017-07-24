@@ -34,13 +34,13 @@ class HtmlTitleSettingConfigForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('html_title.setting');
 
-    $form['allow_html_tags'] = array(
+    $form['allow_html_tags'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Allow html tags'),
       '#maxlength' => 64,
       '#size' => 64,
       '#default_value' => $config->get('allow_html_tags'),
-    );
+    ];
 
     return parent::buildForm($form, $form_state);
   }

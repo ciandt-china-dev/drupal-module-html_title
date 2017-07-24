@@ -1,5 +1,4 @@
 name: 'Html title'
 description: 'Enables limited HTML markup in node titles.'
 core: 8.x
-project: html_title
 type: module
