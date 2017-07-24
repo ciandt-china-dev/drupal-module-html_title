@@ -2,6 +2,7 @@
 
 /**
  * @file
+ * HTML Title module to enable limited HTML tags in title.
  */
 
 use Drupal\Core\Entity\EntityInterface;
@@ -15,7 +16,7 @@ function html_title_views_data_alter(&$data) {
 }
 
 /**
- * Implementation of hook_preprocess_page_title()
+ * Implements hook_preprocess_page_title().
  */
 function html_title_preprocess_page_title(&$variables) {
   if ($node = \Drupal::routeMatch()->getParameter('node')) {
