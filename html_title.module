@@ -37,6 +37,38 @@ function html_title_preprocess_breadcrumb(&$vars) {
 }
 
 /**
+ * Implements hook_block_view_alter().
+ */
+function html_title_block_view_alter(array &$build, \Drupal\Core\Block\BlockPluginInterface $block) {
+  $configuration = $block->getConfiguration();
+  $label = !empty($configuration['label_display']) ? $configuration['label'] : '';
+  if ($label) {
+    // Unfortunately, due to the way \Drupal\block\BlockViewBuilder::preRender
+    // works, the "content" doesn't get set until after that method is ran.
+    // This method also unsets the #block property which means the raw block
+    // title has to be extracted here now. Use #context to pass this along
+    // and then set the content title to it.
+    $build['#context']['html_title'] = \Drupal::service('html_title.filter')->decodeToMarkup($label);
+    $build['#pre_render'][] = 'html_title_block_pre_render';
+  }
+}
+
+/**
+ * Callback for pre-rendering a block.
+ *
+ * @param array $element
+ *   The render array.
+ *
+ * @return array
+ *   The modified render array.
+ */
+function html_title_block_pre_render(array $element) {
+  // Block labels can be dynamically altered, see template_preprocess_block().
+  $element['content']['#title'] = $element['#context']['html_title'];
+  return $element;
+}
+
+/**
  * Implements hook_theme_registry_alter().
  */
 function html_title_theme_registry_alter(&$theme_registry) {
