@@ -32,6 +32,9 @@ function html_title_preprocess_page_title(&$variables) {
 function html_title_preprocess_breadcrumb(&$vars) {
   $last = &$vars['breadcrumb'][count($vars['breadcrumb']) - 1];
   if (!isset($last['url'])) {
+    if (!is_string($last['text'])) {
+      $last['text'] = \Drupal::service('renderer')->renderPlain($last['text']);
+    }
     $last['text'] = \Drupal::service('html_title.filter')->decodeToMarkup($last['text']);
   }
 }
