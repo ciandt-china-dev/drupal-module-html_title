@@ -34,7 +34,7 @@ class NodeHtmlTitle extends Node {
       if (!$done) {
 
         // Add permitted elements to options so they are not stripped later.
-        $tags = array_map(function($element) {
+        $tags = array_map(function ($element) {
           return '<' . $element . '>';
         }, $elements);
 
