@@ -27,10 +27,36 @@ class HtmlTitleFilter {
   }
 
   /**
+   * Helper function to help filter out unwanted XSS opportunities.
+   *
+   * Use this function if you expect to have junk or incomplete html. It uses the
+   *   same strategy as the "Fix Html" filter option in configuring the HTML
+   *   filter in the text format configuration.
+   */
+  private function filterXSS($title) {
+    $dom = new \DOMDocument();
+    // Ignore warnings during HTML soup loading.
+    @$dom->loadHTML('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>' . $title . '</body></html>', LIBXML_NOENT);
+    $xp = new \DOMXPath($dom);
+    $q = "//body//text()";
+    $nodes = $xp->query($q);
+
+    foreach ($nodes as $n) {
+      $n->nodeValue = htmlentities($n->nodeValue, ENT_QUOTES);
+    }
+    $body = str_replace(
+      array('&amp;quot;', '&amp;#039;'),
+      array('&quot;', '&#039;'),
+      $dom->saveHTML($dom->getElementsByTagName('body')->item(0))
+    );
+    return Xss::filter($body, $this->getAllowHtmlTags());
+  }
+
+  /**
    * Filte string with allow html tags.
    */
   public function decodeToText($str) {
-    return Xss::filter(Html::decodeEntities((string) $str), $this->getAllowHtmlTags());
+    return $this->filterXSS(Html::decodeEntities((string) $str));
   }
 
   /**
