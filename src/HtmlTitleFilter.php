@@ -45,8 +45,8 @@ class HtmlTitleFilter {
       $n->nodeValue = htmlentities($n->nodeValue, ENT_QUOTES);
     }
     $body = str_replace(
-      array('&amp;quot;', '&amp;#039;'),
-      array('&quot;', '&#039;'),
+      array('&amp;quot;', '&amp;#039;', '&amp;lsquo;', '&amp;rsquo;', '&amp;ldquo;', '&amp;rdquo;'),
+      array('&quot;', '&#039;', '&lsquo;', '&rsquo;', '&ldquo;', '&rdquo;'),
       $dom->saveHTML($dom->getElementsByTagName('body')->item(0))
     );
     return Xss::filter($body, $this->getAllowHtmlTags());
