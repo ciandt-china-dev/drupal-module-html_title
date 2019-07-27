@@ -29,8 +29,8 @@ class HtmlTitleFilter {
   /**
    * Helper function to help filter out unwanted XSS opportunities.
    *
-   * Use this function if you expect to have junk or incomplete html. It uses the
-   *   same strategy as the "Fix Html" filter option in configuring the HTML
+   * Use this function if you expect to have junk or incomplete HTML. It uses the
+   *   same strategy as the "Fix HTML" filter option in configuring the HTML
    *   filter in the text format configuration.
    */
   private function filterXSS($title) {
@@ -53,21 +53,21 @@ class HtmlTitleFilter {
   }
 
   /**
-   * Filte string with allow html tags.
+   * Filter string with allowed HTML tags.
    */
   public function decodeToText($str) {
     return $this->filterXSS(Html::decodeEntities((string) $str));
   }
 
   /**
-   * Filte string with allow html tags.
+   * Filter string with allowed HTML tags.
    */
   public function decodeToMarkup($str) {
     return Markup::create($this->decodeToText($str));
   }
 
   /**
-   * Get allow html tags array.
+   * Get allowed HTML tags array.
    */
   public function getAllowHtmlTags() {
     $tags = [];
