@@ -11,7 +11,7 @@ use Drupal\node\Plugin\views\field\Node;
 use Drupal\views\ResultRow;
 
 /**
- * A field that displays node html title .
+ * A field that displays node HTML title.
  *
  * @ingroup views_field_handlers
  *
@@ -20,7 +20,7 @@ use Drupal\views\ResultRow;
 class NodeHtmlTitle extends Node {
 
   /**
-   * Render title with html tags.
+   * Render title with HTML tags.
    */
   public function render(ResultRow $values) {
     $output = parent::render($values);

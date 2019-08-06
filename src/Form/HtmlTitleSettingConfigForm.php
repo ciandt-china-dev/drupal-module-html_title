@@ -12,7 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
  */
 class HtmlTitleSettingConfigForm extends ConfigFormBase {
 
-  protected static $allowHtmlTags = ['<br', '<sub>', '<sup>'];
+  protected static $allowHtmlTags = ['<br>', '<sub>', '<sup>'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class HtmlTitleSettingConfigForm extends ConfigFormBase {
 
     $form['allow_html_tags'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Allow html tags'),
+      '#title' => $this->t('Allowed HTML tags'),
       '#maxlength' => 64,
       '#size' => 64,
       '#default_value' => $config->get('allow_html_tags'),
