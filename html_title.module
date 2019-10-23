@@ -20,10 +20,10 @@ function html_title_views_data_alter(&$data) {
  */
 function html_title_preprocess_page_title(&$variables) {
   if ($node = \Drupal::routeMatch()->getParameter('node')) {
-    $variables['node'] = $node;
-    $node = $variables['node'];
-    $variables['title'] = \Drupal::service('html_title.filter')
-      ->decodeToMarkup($node->getTitle());
+    if (is_object($node)) {
+      $variables['title'] = \Drupal::service('html_title.filter')
+        ->decodeToMarkup($node->getTitle());
+    }
   }
 }
 
